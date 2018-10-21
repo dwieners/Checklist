@@ -8,7 +8,30 @@
 
 import UIKit
 
-class ChecklistViewController: UITableViewController {
+class ChecklistViewController: UITableViewController, AddItemViewControllerDelegate {
+    func addItemViewControllerDidCancel(_ controller: ItemDetailViewController) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func addItemViewController(_ controller: ItemDetailViewController, didFinishAdding item: Checklistitem) {
+        let newRowIndex = items.count
+        items.append(item)
+        let indexPath = IndexPath(row: newRowIndex, section: 0)
+        let indexPaths = [indexPath]
+        tableView.insertRows(at: indexPaths, with: .automatic)
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func addItemViewController(_ controller: ItemDetailViewController, didFinishEditing item: Checklistitem) {
+        if let index = items.index(of: item){
+            let indexPath = IndexPath(item: index, section: 0)
+            if let cell = tableView.cellForRow(at: indexPath){
+                configureText(for: cell, with: item)
+            }
+        }
+        navigationController?.popViewController(animated: true)
+    }
+    
     
     var items: [Checklistitem]
     
@@ -75,6 +98,18 @@ class ChecklistViewController: UITableViewController {
         super.init(coder: aDecoder)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddItem"{
+            let controller = segue.destination as! ItemDetailViewController
+            controller.delegate = self
+        }else if segue.identifier == "EditItem"{
+            let controller = segue.destination as! ItemDetailViewController
+            controller.delegate = self
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell){
+                controller.itemToEdit = items[indexPath.row]
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,11 +157,11 @@ class ChecklistViewController: UITableViewController {
     }
     
     func configureCheckmark(for cell: UITableViewCell, at item: Checklistitem){
-        
+        let checkmark = cell.viewWithTag(1001) as! UIImageView
         if item.checked{
-            cell.accessoryType = .checkmark
+            checkmark.isHidden = false
         }else{
-            cell.accessoryType = .none
+            checkmark.isHidden = true
         }
     }
 
