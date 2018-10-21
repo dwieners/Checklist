@@ -12,12 +12,6 @@ class ChecklistViewController: UITableViewController {
     
     var items: [Checklistitem]
     
-    var row0Checked = false
-    var row1Checked = false
-    var row2Checked = false
-    var row3Checked = false
-    var row4Checked = false
-    
     @IBAction func addItem(_ sender: Any) {
         let newRowIndex = items.count
         
@@ -92,10 +86,6 @@ class ChecklistViewController: UITableViewController {
         navigationController?.navigationBar.tintColor = UIColor.white
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         items.remove(at: indexPath.row)
