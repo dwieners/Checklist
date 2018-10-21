@@ -5,5 +5,5 @@ This is a simple iOS project in order to learn how to store persistent data in i
 ## App Features 
 - [ ] Store data 
 - [ ] Take prictures 
-- [ ] Order data by latest
+- [ ] Order data by latest date
 - [ ] Notifications 
